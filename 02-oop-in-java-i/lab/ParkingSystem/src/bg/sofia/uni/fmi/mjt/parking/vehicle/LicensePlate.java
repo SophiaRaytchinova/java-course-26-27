@@ -8,7 +8,7 @@ public class LicensePlate {
         this.plate = plate;
     }
 
-    public static LicensePlate parse(Stirng text) {
+    public static LicensePlate parse(String text) {
         if (text == null) {
             return null;
         }
