@@ -51,5 +51,4 @@ public class LicensePlate {
     public String toString() {
         return plate;
     }
-
 }

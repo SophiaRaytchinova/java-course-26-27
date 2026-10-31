@@ -2,11 +2,11 @@ package bg.sofia.uni.fmi.mjt.parking.vehicle;
 
 public abstract class AbstractVehicle implements Vehicle{
     private final LicensePlate licensePlate;
-    private final int surchange;
+    private final int surcharge;
 
-    protected AbstractVehicle(LicensePlate licensePlate, int surchange) {
+    protected AbstractVehicle(LicensePlate licensePlate, int surcharge) {
         this.licensePlate = licensePlate;
-        this.surchange = surchange;
+        this.surcharge = surcharge;
     }
 
     @Override
@@ -16,6 +16,6 @@ public abstract class AbstractVehicle implements Vehicle{
 
     @Override
     public int getSurcharge() {
-        return surchange;
+        return surcharge;
     }
 }

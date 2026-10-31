@@ -28,6 +28,4 @@ public abstract class AbstractSanction implements Sanction {
     public int getAmount() {
         return baseAmount + vehicle.getSurcharge();
     }
-
-
 }
