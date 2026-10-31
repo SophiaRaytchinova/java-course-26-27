@@ -21,6 +21,9 @@ public class UrbanMobilityCenter implements ParkingClientAPI, ParkingInspectorAP
     private int sessionsCount;
 
     public UrbanMobilityCenter(BlueZone blueZone, GreenZone greenZone) {
+        if (blueZone == null || greenZone == null) {
+            throw new IllegalArgumentException("Zones cannot be null");
+        }
         this.blueZone = blueZone;
         this.greenZone = greenZone;
         this.sessions = new ParkingSession[MAX_SESSIONS];
@@ -44,10 +47,20 @@ public class UrbanMobilityCenter implements ParkingClientAPI, ParkingInspectorAP
             return false;
         }
 
+        String plateStr = licensePlate.toString();
         LocalDateTime expiryTime = moment.plusHours(1);
 
+        for (int i = 0; i < sessionsCount; i++) {
+            ParkingSession session = sessions[i];
+            if (session != null && session.getPlate().equals(plateStr) && session.getSmsNumber().equals(smsNumber)) {
+                LocalDateTime newExpiry = moment.isAfter(session.getExpiryTime()) ? expiryTime : session.getExpiryTime().plusHours(1);
+                sessions[i] = new ParkingSession(plateStr, smsNumber, newExpiry);
+                return true;
+            }
+        }
+
         if (sessionsCount < MAX_SESSIONS) {
-            sessions[sessionsCount++] = new ParkingSession(licensePlate.toString(), smsNumber, expiryTime);
+            sessions[sessionsCount++] = new ParkingSession(plateStr, smsNumber, expiryTime);
             return true;
         }
 
