@@ -50,17 +50,8 @@ public class UrbanMobilityCenter implements ParkingClientAPI, ParkingInspectorAP
         String plateStr = licensePlate.toString();
         LocalDateTime expiryTime = moment.plusHours(1);
 
-        for (int i = 0; i < sessionsCount; i++) {
-            ParkingSession session = sessions[i];
-            if (session != null && session.getPlate().equals(plateStr) && session.getSmsNumber().equals(smsNumber)) {
-                LocalDateTime newExpiry = moment.isAfter(session.getExpiryTime()) ? expiryTime : session.getExpiryTime().plusHours(1);
-                sessions[i] = new ParkingSession(plateStr, smsNumber, newExpiry);
-                return true;
-            }
-        }
-
         if (sessionsCount < MAX_SESSIONS) {
-            sessions[sessionsCount++] = new ParkingSession(plateStr, smsNumber, expiryTime);
+            sessions[sessionsCount++] = new ParkingSession(plateStr, smsNumber, moment, expiryTime);
             return true;
         }
 
@@ -93,7 +84,11 @@ public class UrbanMobilityCenter implements ParkingClientAPI, ParkingInspectorAP
                     session.getPlate().equals(vehiclePlate) &&
                     session.getSmsNumber().equals(targetZone.getSmsNumber())) {
 
-                if (!moment.isAfter(session.getExpiryTime())) {
+                // Проверяваме дали моментът на инспекция е ВЪТРЕ в интервала [startTime, expiryTime]
+                boolean isAfterOrEqualStart = !moment.isBefore(session.getStartTime());
+                boolean isBeforeOrEqualExpiry = !moment.isAfter(session.getExpiryTime());
+
+                if (isAfterOrEqualStart && isBeforeOrEqualExpiry) {
                     isPaid = true;
                     break;
                 }

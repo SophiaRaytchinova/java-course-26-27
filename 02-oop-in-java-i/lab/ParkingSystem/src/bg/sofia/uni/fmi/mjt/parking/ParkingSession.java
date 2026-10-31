@@ -6,14 +6,16 @@ import java.util.Objects;
 public class ParkingSession {
     private final String plate;
     private final String smsNumber;
+    private final LocalDateTime startTime;
     private final LocalDateTime expiryTime;
 
-    public ParkingSession(String plate, String smsNumber, LocalDateTime expiryTime) {
-        if (plate == null || smsNumber == null || expiryTime == null) {
+    public ParkingSession(String plate, String smsNumber, LocalDateTime startTime, LocalDateTime expiryTime) {
+        if (plate == null || smsNumber == null || startTime == null || expiryTime == null) {
             throw new IllegalArgumentException("ParkingSession parameters cannot be null");
         }
         this.plate = plate;
         this.smsNumber = smsNumber;
+        this.startTime = startTime;
         this.expiryTime = expiryTime;
     }
 
@@ -23,6 +25,10 @@ public class ParkingSession {
 
     public String getSmsNumber() {
         return smsNumber;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     public LocalDateTime getExpiryTime() {
@@ -36,12 +42,13 @@ public class ParkingSession {
         ParkingSession that = (ParkingSession) o;
         return Objects.equals(plate, that.plate) &&
                 Objects.equals(smsNumber, that.smsNumber) &&
+                Objects.equals(startTime, that.startTime) &&
                 Objects.equals(expiryTime, that.expiryTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(plate, smsNumber, expiryTime);
+        return Objects.hash(plate, smsNumber, startTime, expiryTime);
     }
 
     @Override
@@ -49,6 +56,7 @@ public class ParkingSession {
         return "ParkingSession{" +
                 "plate='" + plate + '\'' +
                 ", smsNumber='" + smsNumber + '\'' +
+                ", startTime=" + startTime +
                 ", expiryTime=" + expiryTime +
                 '}';
     }
